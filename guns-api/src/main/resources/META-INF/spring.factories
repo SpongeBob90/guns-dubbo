@@ -1,8 +1,0 @@
-# AutoConfiguration
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-GlobalController,\
-DefaultFastjsonConfig,\
-MultiDataSourceConfig,\
-SingleDataSourceConfig,\
-DefaultProperties,\
-DefaultWebConfig

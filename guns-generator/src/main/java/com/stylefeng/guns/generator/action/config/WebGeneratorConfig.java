@@ -2,9 +2,9 @@ package com.stylefeng.guns.generator.action.config;
 
 import com.baomidou.mybatisplus.generator.config.rules.DbType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
+import com.stylefeng.guns.generator.action.model.GenQo;
 import com.stylefeng.guns.core.support.StrKit;
 import com.stylefeng.guns.core.util.ToolUtil;
-import com.stylefeng.guns.generator.action.model.GenQo;
 
 import java.io.File;
 
