@@ -1,7 +1,7 @@
 package com.stylefeng.guns.user.common.aop;
 
-import com.stylefeng.guns.core.aop.BaseControllerExceptionHandler;
-import com.stylefeng.guns.core.base.tips.ErrorTip;
+import com.stylefeng.guns.admin.aop.BaseControllerExceptionHandler;
+import com.stylefeng.guns.admin.base.tips.ErrorTip;
 import com.stylefeng.guns.user.common.exception.BizExceptionEnum;
 import io.jsonwebtoken.JwtException;
 import org.slf4j.Logger;

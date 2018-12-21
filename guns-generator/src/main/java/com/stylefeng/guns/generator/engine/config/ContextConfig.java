@@ -1,7 +1,7 @@
 package com.stylefeng.guns.generator.engine.config;
 
 
-import com.stylefeng.guns.core.util.ToolUtil;
+import com.stylefeng.guns.admin.util.ToolUtil;
 
 /**
  * 全局配置
@@ -19,7 +19,7 @@ public class ContextConfig {
     private String moduleName = "system";  //模块名称
 
     private String proPackage = "com.stylefeng.guns.admin";
-    private String coreBasePackage = "com.stylefeng.guns.core";
+    private String coreBasePackage = "com.stylefeng.guns.admin";
     private String modelPackageName = "com.stylefeng.guns.modular.system.model";        //model的包名
     private String modelMapperPackageName = "com.stylefeng.guns.modular.system.dao";    //model的dao
     private String entityName;              //实体的名称
