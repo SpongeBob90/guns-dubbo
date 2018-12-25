@@ -2,13 +2,11 @@ package com.stylefeng.guns.gateway.modular.auth.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.stylefeng.guns.api.user.UserAPI;
-import com.stylefeng.guns.core.exception.GunsException;
-import com.stylefeng.guns.gateway.common.exception.BizExceptionEnum;
 import com.stylefeng.guns.gateway.modular.auth.controller.dto.AuthRequest;
 import com.stylefeng.guns.gateway.modular.auth.controller.dto.AuthResponse;
 import com.stylefeng.guns.gateway.modular.auth.util.JwtTokenUtil;
+import com.stylefeng.guns.gateway.modular.vo.ResponseVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,7 +26,7 @@ public class AuthController {
     private UserAPI userAPI;
 
     @RequestMapping(value = "${jwt.auth-path}")
-    public ResponseEntity<?> createAuthenticationToken(AuthRequest authRequest) {
+    public ResponseVO createAuthenticationToken(AuthRequest authRequest) {
         boolean validate = true;
         // 去除guns自带用户名验证机制，使用自定义验证机制
         int userId = userAPI.login(authRequest.getUserName(), authRequest.getPassword());
@@ -38,9 +36,9 @@ public class AuthController {
         if (validate) {
             final String randomKey = jwtTokenUtil.getRandomKey();
             final String token = jwtTokenUtil.generateToken("" + userId, randomKey);
-            return ResponseEntity.ok(new AuthResponse(token, randomKey));
+            return ResponseVO.success(new AuthResponse(token, randomKey));
         } else {
-            throw new GunsException(BizExceptionEnum.AUTH_REQUEST_ERROR);
+            return ResponseVO.serviceFail("用户名或密码错误");
         }
     }
 }

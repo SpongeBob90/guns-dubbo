@@ -1,6 +1,7 @@
 package com.stylefeng.guns.gateway.modular.auth.filter;
 
 import com.stylefeng.guns.core.base.tips.ErrorTip;
+import com.stylefeng.guns.gateway.common.CurrentUser;
 import com.stylefeng.guns.gateway.modular.auth.util.JwtTokenUtil;
 import com.stylefeng.guns.core.util.RenderUtil;
 import com.stylefeng.guns.gateway.common.exception.BizExceptionEnum;
@@ -51,11 +52,16 @@ public class AuthFilter extends OncePerRequestFilter {
         }
 
         final String requestHeader = request.getHeader(jwtProperties.getHeader());
-        String authToken = null;
         if (requestHeader != null && requestHeader.startsWith("Bearer ")) {
-            authToken = requestHeader.substring(7);
-
-            //验证token是否过期,包含了验证jwt是否正确
+            String authToken = requestHeader.substring(7);
+            // 通过token获取userId，并存入ThreadLocal，以便后续业务调用
+            String userId = jwtTokenUtil.getUsernameFromToken(authToken);
+            if (userId == null) {
+                return;
+            } else {
+                CurrentUser.saveUserId(userId);
+            }
+            // 验证token是否过期,包含了验证jwt是否正确
             try {
                 boolean flag = jwtTokenUtil.isTokenExpired(authToken);
                 if (flag) {
