@@ -1,6 +1,6 @@
 package com.stylefeng.guns.user.modular.auth.controller;
 
-import com.stylefeng.guns.admin.exception.GunsException;
+import com.stylefeng.guns.core.exception.GunsException;
 import com.stylefeng.guns.user.common.exception.BizExceptionEnum;
 import com.stylefeng.guns.user.modular.auth.controller.dto.AuthRequest;
 import com.stylefeng.guns.user.modular.auth.controller.dto.AuthResponse;

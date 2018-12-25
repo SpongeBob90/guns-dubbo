@@ -1,8 +1,8 @@
 package com.stylefeng.guns.user.modular.auth.filter;
 
-import com.stylefeng.guns.admin.base.tips.ErrorTip;
+import com.stylefeng.guns.core.base.tips.ErrorTip;
 import com.stylefeng.guns.user.modular.auth.util.JwtTokenUtil;
-import com.stylefeng.guns.admin.util.RenderUtil;
+import com.stylefeng.guns.core.util.RenderUtil;
 import com.stylefeng.guns.user.common.exception.BizExceptionEnum;
 import com.stylefeng.guns.user.config.properties.JwtProperties;
 import io.jsonwebtoken.JwtException;
