@@ -8,8 +8,10 @@ import com.stylefeng.guns.api.user.UserAPI;
 import com.stylefeng.guns.core.util.MD5Util;
 import com.stylefeng.guns.user.common.persistence.dao.MoocUserTMapper;
 import com.stylefeng.guns.user.common.persistence.model.MoocUserT;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
+import java.util.Date;
 
 /**
  * @author wyw
@@ -19,7 +21,7 @@ import org.springframework.stereotype.Component;
 @Service(interfaceClass = UserAPI.class)
 public class UserServiceImpl implements UserAPI {
 
-    @Autowired
+    @Resource
     private MoocUserTMapper moocUserTMapper;
 
     @Override
@@ -73,12 +75,73 @@ public class UserServiceImpl implements UserAPI {
 
     @Override
     public UserInfoModule getUserInfo(int uuid) {
-        return null;
+        // 根据主键查询用户信息[MoocUserT]
+        MoocUserT moocUserT = moocUserTMapper.selectById(uuid);
+        // 将MoocUserT转换为UserInfoModel
+        UserInfoModule userInfoModule = do2UserInfo(moocUserT);
+        // 返回UserInfoModel
+        return userInfoModule;
     }
 
     @Override
     public UserInfoModule updateUserInfo(UserInfoModule userInfoModule) {
-        return null;
+        // 将传入的数据转换为MoocUserT
+        MoocUserT moocUserT = do2MoocUserT(userInfoModule);
+        // 将数据存入数据库
+        Integer result = moocUserTMapper.updateById(moocUserT);
+        if (result > 0) {
+            // 按照Id将用户信息查出来
+            UserInfoModule userInfo = getUserInfo(moocUserT.getUuid());
+            // 返回给前端
+            return userInfo;
+        } else {
+            return userInfoModule;
+        }
+    }
+
+    private UserInfoModule do2UserInfo(MoocUserT moocUserT) {
+        UserInfoModule userInfoModule = new UserInfoModule();
+
+        userInfoModule.setUuid(moocUserT.getUuid());
+        userInfoModule.setUsername(moocUserT.getAddress());
+        userInfoModule.setUpdateTime(moocUserT.getUpdateTime().getTime());
+        userInfoModule.setSex(moocUserT.getUserSex());
+        userInfoModule.setPhone(moocUserT.getUserPhone());
+        userInfoModule.setNickname(moocUserT.getNickName());
+        userInfoModule.setLifeState("" + moocUserT.getLifeState());
+        userInfoModule.setHeadAddress(moocUserT.getHeadUrl());
+        userInfoModule.setEmail(moocUserT.getEmail());
+        userInfoModule.setCreateTime(moocUserT.getBeginTime().getTime());
+        userInfoModule.setBirthday(moocUserT.getBirthday());
+        userInfoModule.setBiography(moocUserT.getBiography());
+        userInfoModule.setAddress(moocUserT.getAddress());
+
+        return userInfoModule;
+    }
+
+    private MoocUserT do2MoocUserT(UserInfoModule userInfoModule) {
+        MoocUserT moocUserT = new MoocUserT();
+
+        moocUserT.setUuid(userInfoModule.getUuid());
+        moocUserT.setUserSex(userInfoModule.getSex());
+        moocUserT.setUpdateTime(time2Date(System.currentTimeMillis()));
+        moocUserT.setNickName(userInfoModule.getNickname());
+        moocUserT.setLifeState(Integer.parseInt(userInfoModule.getLifeState()));
+        moocUserT.setHeadUrl(userInfoModule.getHeadAddress());
+        moocUserT.setBirthday(userInfoModule.getBirthday());
+        moocUserT.setBiography(userInfoModule.getBiography());
+        moocUserT.setBeginTime(time2Date(userInfoModule.getCreateTime()));
+        moocUserT.setEmail(userInfoModule.getEmail());
+        moocUserT.setAddress(userInfoModule.getAddress());
+        moocUserT.setUserPhone(userInfoModule.getPhone());
+        moocUserT.setUserName(userInfoModule.getUsername());
+
+        return moocUserT;
+    }
+
+    private Date time2Date(long time) {
+        Date date = new Date(time);
+        return date;
     }
 
 }

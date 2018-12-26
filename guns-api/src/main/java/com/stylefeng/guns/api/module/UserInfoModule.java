@@ -1,11 +1,13 @@
 package com.stylefeng.guns.api.module;
 
+import java.io.Serializable;
+
 /**
  * @author : wyw 2018-12-24 11:23
  **/
-public class UserInfoModule {
+public class UserInfoModule implements Serializable {
 
-    private String uuid;
+    private Integer uuid;
 
     private String username;
 
@@ -31,11 +33,11 @@ public class UserInfoModule {
 
     private long updateTime;
 
-    public String getUuid() {
+    public Integer getUuid() {
         return uuid;
     }
 
-    public void setUuid(String uuid) {
+    public void setUuid(Integer uuid) {
         this.uuid = uuid;
     }
 

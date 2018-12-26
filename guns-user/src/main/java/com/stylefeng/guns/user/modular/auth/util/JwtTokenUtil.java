@@ -1,6 +1,6 @@
 package com.stylefeng.guns.user.modular.auth.util;
 
-import com.stylefeng.guns.admin.util.ToolUtil;
+import com.stylefeng.guns.core.util.ToolUtil;
 import com.stylefeng.guns.user.config.properties.JwtProperties;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
