@@ -1,8 +1,11 @@
 package com.stylefeng.guns.gateway.modular.vo;
 
+import lombok.Data;
+
 /**
  * @author : wyw 2018-12-25 10:32
  **/
+@Data
 public class ResponseVO<T> {
     // 返回状态【0-成功，1-业务失败，999-系统异常】
     private int status;
@@ -10,6 +13,8 @@ public class ResponseVO<T> {
     private String msg;
     // 返回数据
     private T data;
+    // 图片前缀
+    private String imgPre;
 
     private ResponseVO(){}
 
@@ -27,6 +32,14 @@ public class ResponseVO<T> {
         return responseVO;
     }
 
+    public static<T> ResponseVO success(String imgPre, T t){
+        ResponseVO responseVO = new ResponseVO();
+        responseVO.setStatus(0);
+        responseVO.setImgPre(imgPre);
+        responseVO.setData(t);
+        return responseVO;
+    }
+
     public static<T> ResponseVO serviceFail(String msg){
         ResponseVO responseVO = new ResponseVO();
         responseVO.setStatus(1);
@@ -41,27 +54,4 @@ public class ResponseVO<T> {
         return responseVO;
     }
 
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
-    }
 }

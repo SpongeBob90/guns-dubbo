@@ -2,9 +2,9 @@ package com.stylefeng.guns.user.modular.user;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.stylefeng.guns.api.module.UserInfoModule;
-import com.stylefeng.guns.api.module.UserModule;
-import com.stylefeng.guns.api.user.UserAPI;
+import com.stylefeng.guns.api.user.vo.UserInfoVO;
+import com.stylefeng.guns.api.user.vo.UserVO;
+import com.stylefeng.guns.api.user.UserServiceAPI;
 import com.stylefeng.guns.core.util.MD5Util;
 import com.stylefeng.guns.user.common.persistence.dao.MoocUserTMapper;
 import com.stylefeng.guns.user.common.persistence.model.MoocUserT;
@@ -18,23 +18,23 @@ import java.util.Date;
  * @date 2018\12\20 0020 22:18
  */
 @Component
-@Service(interfaceClass = UserAPI.class)
-public class UserServiceImpl implements UserAPI {
+@Service(interfaceClass = UserServiceAPI.class, loadbalance = "roundrobin")
+public class UserServiceServiceImpl implements UserServiceAPI {
 
     @Resource
     private MoocUserTMapper moocUserTMapper;
 
     @Override
-    public boolean register(UserModule userModule) {
+    public boolean register(UserVO userVO) {
         // 将注册信息实体转换为数据实体
         MoocUserT moocUserT = new MoocUserT();
-        moocUserT.setUserName(userModule.getUsername());
+        moocUserT.setUserName(userVO.getUsername());
         // 数据加密【MD5混淆加密( + 盐值)】
-        String md5Password = MD5Util.encrypt(userModule.getPassword());
+        String md5Password = MD5Util.encrypt(userVO.getPassword());
         moocUserT.setUserPwd(md5Password);
-        moocUserT.setEmail(userModule.getEmail());
-        moocUserT.setAddress(userModule.getAddress());
-        moocUserT.setUserPhone(userModule.getPhone());
+        moocUserT.setEmail(userVO.getEmail());
+        moocUserT.setAddress(userVO.getAddress());
+        moocUserT.setUserPhone(userVO.getPhone());
         Integer insert = moocUserTMapper.insert(moocUserT);
         if (insert > 0) {
             return true;
@@ -74,67 +74,67 @@ public class UserServiceImpl implements UserAPI {
     }
 
     @Override
-    public UserInfoModule getUserInfo(int uuid) {
+    public UserInfoVO getUserInfo(int uuid) {
         // 根据主键查询用户信息[MoocUserT]
         MoocUserT moocUserT = moocUserTMapper.selectById(uuid);
         // 将MoocUserT转换为UserInfoModel
-        UserInfoModule userInfoModule = do2UserInfo(moocUserT);
+        UserInfoVO userInfoVO = do2UserInfo(moocUserT);
         // 返回UserInfoModel
-        return userInfoModule;
+        return userInfoVO;
     }
 
     @Override
-    public UserInfoModule updateUserInfo(UserInfoModule userInfoModule) {
+    public UserInfoVO updateUserInfo(UserInfoVO userInfoVO) {
         // 将传入的数据转换为MoocUserT
-        MoocUserT moocUserT = do2MoocUserT(userInfoModule);
+        MoocUserT moocUserT = do2MoocUserT(userInfoVO);
         // 将数据存入数据库
         Integer result = moocUserTMapper.updateById(moocUserT);
         if (result > 0) {
             // 按照Id将用户信息查出来
-            UserInfoModule userInfo = getUserInfo(moocUserT.getUuid());
+            UserInfoVO userInfo = getUserInfo(moocUserT.getUuid());
             // 返回给前端
             return userInfo;
         } else {
-            return userInfoModule;
+            return userInfoVO;
         }
     }
 
-    private UserInfoModule do2UserInfo(MoocUserT moocUserT) {
-        UserInfoModule userInfoModule = new UserInfoModule();
+    private UserInfoVO do2UserInfo(MoocUserT moocUserT) {
+        UserInfoVO userInfoVO = new UserInfoVO();
 
-        userInfoModule.setUuid(moocUserT.getUuid());
-        userInfoModule.setUsername(moocUserT.getAddress());
-        userInfoModule.setUpdateTime(moocUserT.getUpdateTime().getTime());
-        userInfoModule.setSex(moocUserT.getUserSex());
-        userInfoModule.setPhone(moocUserT.getUserPhone());
-        userInfoModule.setNickname(moocUserT.getNickName());
-        userInfoModule.setLifeState("" + moocUserT.getLifeState());
-        userInfoModule.setHeadAddress(moocUserT.getHeadUrl());
-        userInfoModule.setEmail(moocUserT.getEmail());
-        userInfoModule.setCreateTime(moocUserT.getBeginTime().getTime());
-        userInfoModule.setBirthday(moocUserT.getBirthday());
-        userInfoModule.setBiography(moocUserT.getBiography());
-        userInfoModule.setAddress(moocUserT.getAddress());
+        userInfoVO.setUuid(moocUserT.getUuid());
+        userInfoVO.setUsername(moocUserT.getAddress());
+        userInfoVO.setUpdateTime(moocUserT.getUpdateTime().getTime());
+        userInfoVO.setSex(moocUserT.getUserSex());
+        userInfoVO.setPhone(moocUserT.getUserPhone());
+        userInfoVO.setNickname(moocUserT.getNickName());
+        userInfoVO.setLifeState("" + moocUserT.getLifeState());
+        userInfoVO.setHeadAddress(moocUserT.getHeadUrl());
+        userInfoVO.setEmail(moocUserT.getEmail());
+        userInfoVO.setCreateTime(moocUserT.getBeginTime().getTime());
+        userInfoVO.setBirthday(moocUserT.getBirthday());
+        userInfoVO.setBiography(moocUserT.getBiography());
+        userInfoVO.setAddress(moocUserT.getAddress());
 
-        return userInfoModule;
+        return userInfoVO;
     }
 
-    private MoocUserT do2MoocUserT(UserInfoModule userInfoModule) {
+    private MoocUserT do2MoocUserT(UserInfoVO userInfoVO) {
         MoocUserT moocUserT = new MoocUserT();
 
-        moocUserT.setUuid(userInfoModule.getUuid());
-        moocUserT.setUserSex(userInfoModule.getSex());
+        moocUserT.setUuid(userInfoVO.getUuid());
+        moocUserT.setUserSex(userInfoVO.getSex());
         moocUserT.setUpdateTime(time2Date(System.currentTimeMillis()));
-        moocUserT.setNickName(userInfoModule.getNickname());
-        moocUserT.setLifeState(Integer.parseInt(userInfoModule.getLifeState()));
-        moocUserT.setHeadUrl(userInfoModule.getHeadAddress());
-        moocUserT.setBirthday(userInfoModule.getBirthday());
-        moocUserT.setBiography(userInfoModule.getBiography());
-        moocUserT.setBeginTime(time2Date(userInfoModule.getCreateTime()));
-        moocUserT.setEmail(userInfoModule.getEmail());
-        moocUserT.setAddress(userInfoModule.getAddress());
-        moocUserT.setUserPhone(userInfoModule.getPhone());
-        moocUserT.setUserName(userInfoModule.getUsername());
+        moocUserT.setNickName(userInfoVO.getNickname());
+        moocUserT.setLifeState(Integer.parseInt(userInfoVO.getLifeState()));
+        moocUserT.setHeadUrl(userInfoVO.getHeadAddress());
+        moocUserT.setBirthday(userInfoVO.getBirthday());
+        moocUserT.setBiography(userInfoVO.getBiography());
+        moocUserT.setBeginTime(time2Date(userInfoVO.getCreateTime()));
+        moocUserT.setEmail(userInfoVO.getEmail());
+        moocUserT.setAddress(userInfoVO.getAddress());
+        moocUserT.setUserPhone(userInfoVO.getPhone());
+        moocUserT.setUserName(userInfoVO.getUsername());
 
         return moocUserT;
     }

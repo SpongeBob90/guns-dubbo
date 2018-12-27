@@ -1,9 +1,9 @@
 package com.stylefeng.guns.gateway.modular.user;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.stylefeng.guns.api.module.UserInfoModule;
-import com.stylefeng.guns.api.module.UserModule;
-import com.stylefeng.guns.api.user.UserAPI;
+import com.stylefeng.guns.api.user.vo.UserInfoVO;
+import com.stylefeng.guns.api.user.vo.UserVO;
+import com.stylefeng.guns.api.user.UserServiceAPI;
 import com.stylefeng.guns.gateway.common.CurrentUser;
 import com.stylefeng.guns.gateway.modular.vo.ResponseVO;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,18 +18,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user/")
 public class UserController {
 
-    @Reference(interfaceClass = UserAPI.class)
-    private UserAPI userAPI;
+    @Reference(interfaceClass = UserServiceAPI.class)
+    private UserServiceAPI userServiceAPI;
 
     @PostMapping("register")
-    public ResponseVO register(UserModule userModule) {
-        if ((userModule.getUsername() == null) || (userModule.getUsername().trim().length() == 0)) {
+    public ResponseVO register(UserVO userVO) {
+        if ((userVO.getUsername() == null) || (userVO.getUsername().trim().length() == 0)) {
             return ResponseVO.serviceFail("用户名不能为空");
         }
-        if ((userModule.getPassword() == null) || (userModule.getPassword().trim().length() == 0)) {
+        if ((userVO.getPassword() == null) || (userVO.getPassword().trim().length() == 0)) {
             return ResponseVO.serviceFail("密码不能为空");
         }
-        boolean isSuccess = userAPI.register(userModule);
+        boolean isSuccess = userServiceAPI.register(userVO);
         if (isSuccess) {
             return ResponseVO.success("注册成功");
         } else {
@@ -40,7 +40,7 @@ public class UserController {
     @PostMapping("check")
     public ResponseVO check(String username) {
         if ((username != null) && (username.trim().length() > 0)) {
-            boolean notExists = userAPI.checkUsername(username);
+            boolean notExists = userServiceAPI.checkUsername(username);
             if (notExists) {
                 return ResponseVO.success("用户名不存在");
             } else {
@@ -74,7 +74,7 @@ public class UserController {
         if ((userId != null) && (userId.trim().length() > 0)) {
             // 将用户ID传入后端进行查询
             int uuid = Integer.parseInt(userId);
-            UserInfoModule userInfo = userAPI.getUserInfo(uuid);
+            UserInfoVO userInfo = userServiceAPI.getUserInfo(uuid);
             if (userInfo != null) {
                 return ResponseVO.success(userInfo);
             } else {
@@ -86,17 +86,17 @@ public class UserController {
     }
 
     @PostMapping("updateUserInfo")
-    public ResponseVO updateUserInfo(UserInfoModule userInfoModule) {
+    public ResponseVO updateUserInfo(UserInfoVO userInfoVO) {
         // 获取当前登陆用户
         String userId = CurrentUser.getUserId();
         if ((userId != null) && (userId.trim().length() > 0)) {
             // 将用户ID传入后端进行查询
             int uuid = Integer.parseInt(userId);
             // 判断当前登陆人员的ID与修改的结果ID是否一致
-            if (uuid != userInfoModule.getUuid()) {
+            if (uuid != userInfoVO.getUuid()) {
                 return ResponseVO.serviceFail("请修改您个人的信息");
             }
-            UserInfoModule userInfo = userAPI.updateUserInfo(userInfoModule);
+            UserInfoVO userInfo = userServiceAPI.updateUserInfo(userInfoVO);
             if (userInfo != null) {
                 return ResponseVO.success(userInfo);
             } else {
