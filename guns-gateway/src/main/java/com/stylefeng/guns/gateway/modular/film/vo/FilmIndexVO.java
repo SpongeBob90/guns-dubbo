@@ -25,4 +25,6 @@ public class FilmIndexVO {
 
     private List<FilmInfo> top;
 
+    private String imgPre;
+
 }

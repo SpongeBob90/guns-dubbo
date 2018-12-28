@@ -13,8 +13,6 @@ public class ResponseVO<T> {
     private String msg;
     // 返回数据
     private T data;
-    // 图片前缀
-    private String imgPre;
 
     private ResponseVO(){}
 
@@ -29,14 +27,6 @@ public class ResponseVO<T> {
         ResponseVO responseVO = new ResponseVO();
         responseVO.setStatus(0);
         responseVO.setMsg(msg);
-        return responseVO;
-    }
-
-    public static<T> ResponseVO success(String imgPre, T t){
-        ResponseVO responseVO = new ResponseVO();
-        responseVO.setStatus(0);
-        responseVO.setImgPre(imgPre);
-        responseVO.setData(t);
         return responseVO;
     }
 

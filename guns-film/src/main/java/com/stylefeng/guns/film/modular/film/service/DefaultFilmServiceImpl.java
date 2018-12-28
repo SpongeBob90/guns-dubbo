@@ -53,7 +53,7 @@ public class DefaultFilmServiceImpl implements FilmServiceAPI{
     }
 
     @Override
-    public FilmVO getHotFilms(boolean isLimit, int nums) {
+    public FilmVO getHotFilms(boolean isLimit, int nums, int nowPage, int sortId, int sourceId, int yearId, int catId) {
         FilmVO filmVO = new FilmVO();
         // 热映影片的限制条件
         EntityWrapper wrapper = new EntityWrapper();
@@ -68,14 +68,51 @@ public class DefaultFilmServiceImpl implements FilmServiceAPI{
             filmVO.setFilmInfo(filmInfos);
             filmVO.setFilmNum(filmInfos.size());
         } else {
-            //TODO 如果不是，则是列表页，同样需要限制内容为热映影片
+            // 如果不是，则是列表页，同样需要限制内容为热映影片
+            Page<MoocFilmT> page;
+            // 根据sortId的不同，来组织不同的Page对象：1-按热门搜索；2-按时间搜索；3-按评价搜索
+            switch (sortId) {
+                case 1:
+                    page = new Page<>(nowPage, nums, "film_box_office");
+                    break;
+                case 2:
+                    page = new Page<>(nowPage, nums, "film_time");
+                    break;
+                case 3:
+                    page = new Page<>(nowPage, nums, "film_score");
+                    break;
+                default:
+                    page = new Page<>(nowPage, nums, "film_box_office");
+                    break;
+            }
+            // 如果sourceId、yearId、catId不为99，则表示要按照对应的编号进行查询
+            if (sourceId != 99) {
+                wrapper.eq("film_source", sourceId);
+            }
+            if (yearId != 99) {
+                wrapper.eq("film_date", yearId);
+            }
+            if (catId != 99) {
+                wrapper.like("film_cats", "%#" + catId + "#%");
+            }
+            // 获取符合条件影片总页数
+            int totalPage = moocFilmTMapper.selectCount(wrapper);
+            // 获取符合条件的影片列表
+            List<MoocFilmT> moocFilmTS = moocFilmTMapper.selectPage(page, wrapper);
+            // 转换数据格式
+            List<FilmInfo> filmInfos = getFilmInfos(moocFilmTS);
+            filmVO.setFilmInfo(filmInfos);
+            filmVO.setFilmNum(filmInfos.size());
+            filmVO.setTotalPage(totalPage);
+            filmVO.setNowPage(nowPage);
+            filmVO.setImgPre("http://img.meetingshop.cn/");
         }
 
         return filmVO;
     }
 
     @Override
-    public FilmVO getSoonFilms(boolean isLimit, int nums) {
+    public FilmVO getSoonFilms(boolean isLimit, int nums, int nowPage, int sortId, int sourceId, int yearId, int catId) {
         FilmVO filmVO = new FilmVO();
         // 热映影片的限制条件
         EntityWrapper wrapper = new EntityWrapper();
@@ -90,8 +127,93 @@ public class DefaultFilmServiceImpl implements FilmServiceAPI{
             filmVO.setFilmInfo(filmInfos);
             filmVO.setFilmNum(filmInfos.size());
         } else {
-            //TODO 如果不是，则是列表页，同样需要限制内容为即将上映影片
+            // 如果不是，则是列表页，同样需要限制内容为即将上映影片
+            Page<MoocFilmT> page;
+            // 根据sortId的不同，来组织不同的Page对象：1-按热门搜索；2-按时间搜索；3-按评价搜索
+            switch (sortId) {
+                case 1:
+                    page = new Page<>(nowPage, nums, "film_preSaleNum");
+                    break;
+                case 2:
+                    page = new Page<>(nowPage, nums, "film_time");
+                    break;
+                case 3:
+                    page = new Page<>(nowPage, nums, "film_preSaleNum");
+                    break;
+                default:
+                    page = new Page<>(nowPage, nums, "film_preSaleNum");
+                    break;
+            }
+            // 如果sourceId、yearId、catId不为99，则表示要按照对应的编号进行查询
+            if (sourceId != 99) {
+                wrapper.eq("film_source", sourceId);
+            }
+            if (yearId != 99) {
+                wrapper.eq("film_date", yearId);
+            }
+            if (catId != 99) {
+                wrapper.like("film_cats", "%#" + catId + "#%");
+            }
+            // 获取符合条件影片总页数
+            int totalPage = moocFilmTMapper.selectCount(wrapper);
+            // 获取符合条件的影片列表
+            List<MoocFilmT> moocFilmTS = moocFilmTMapper.selectPage(page, wrapper);
+            // 转换数据格式
+            List<FilmInfo> filmInfos = getFilmInfos(moocFilmTS);
+            filmVO.setFilmInfo(filmInfos);
+            filmVO.setFilmNum(filmInfos.size());
+            filmVO.setTotalPage(totalPage);
+            filmVO.setNowPage(nowPage);
+            filmVO.setImgPre("http://img.meetingshop.cn/");
         }
+
+        return filmVO;
+    }
+
+    @Override
+    public FilmVO getClassicFilms(int nums, int nowPage, int sortId, int sourceId, int yearId, int catId) {
+        FilmVO filmVO = new FilmVO();
+        // 经典影片的限制条件
+        EntityWrapper wrapper = new EntityWrapper();
+        wrapper.eq("film_status", "3");
+
+        Page<MoocFilmT> page;
+        // 根据sortId的不同，来组织不同的Page对象：1-按热门搜索；2-按时间搜索；3-按评价搜索
+        switch (sortId) {
+            case 1:
+                page = new Page<>(nowPage, nums, "film_box_office");
+                break;
+            case 2:
+                page = new Page<>(nowPage, nums, "film_time");
+                break;
+            case 3:
+                page = new Page<>(nowPage, nums, "film_score");
+                break;
+            default:
+                page = new Page<>(nowPage, nums, "film_box_office");
+                break;
+        }
+        // 如果sourceId、yearId、catId不为99，则表示要按照对应的编号进行查询
+        if (sourceId != 99) {
+            wrapper.eq("film_source", sourceId);
+        }
+        if (yearId != 99) {
+            wrapper.eq("film_date", yearId);
+        }
+        if (catId != 99) {
+            wrapper.like("film_cats", "%#" + catId + "#%");
+        }
+        // 获取符合条件影片总页数
+        int totalPage = moocFilmTMapper.selectCount(wrapper);
+        // 获取符合条件的影片列表
+        List<MoocFilmT> moocFilmTS = moocFilmTMapper.selectPage(page, wrapper);
+        // 转换数据格式
+        List<FilmInfo> filmInfos = getFilmInfos(moocFilmTS);
+        filmVO.setFilmInfo(filmInfos);
+        filmVO.setFilmNum(filmInfos.size());
+        filmVO.setTotalPage(totalPage);
+        filmVO.setNowPage(nowPage);
+        filmVO.setImgPre("http://img.meetingshop.cn/");
 
         return filmVO;
     }
@@ -172,6 +294,11 @@ public class DefaultFilmServiceImpl implements FilmServiceAPI{
             years.add(yearVO);
         }
         return years;
+    }
+
+    @Override
+    public FilmDetailVO getFilmDetail(int searchType, String searchParam) {
+        return null;
     }
 
     private List<FilmInfo> getFilmInfos(List<MoocFilmT> moocFilmTS) {
