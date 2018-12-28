@@ -10,6 +10,8 @@ import java.io.Serializable;
 @Data
 public class FilmDetailVO implements Serializable {
 
+    private String filmId;
+
     private String filmName;
 
     private String filmEnName;

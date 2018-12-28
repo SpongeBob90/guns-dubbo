@@ -2,10 +2,7 @@ package com.stylefeng.guns.gateway.modular.film;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.stylefeng.guns.api.film.FilmServiceAPI;
-import com.stylefeng.guns.api.film.vo.CatVO;
-import com.stylefeng.guns.api.film.vo.FilmVO;
-import com.stylefeng.guns.api.film.vo.SourceVO;
-import com.stylefeng.guns.api.film.vo.YearVO;
+import com.stylefeng.guns.api.film.vo.*;
 import com.stylefeng.guns.gateway.modular.film.vo.FilmConditionVO;
 import com.stylefeng.guns.gateway.modular.film.vo.FilmIndexVO;
 import com.stylefeng.guns.gateway.modular.film.vo.FilmRequestVO;
@@ -106,10 +103,13 @@ public class FilmController {
     @GetMapping("films/{searchParam}")
     public ResponseVO films(@PathVariable("searchParam") String searchParam, int searchType) {
         // 根据searchType判断查询类型
-
-        // 不同的查询类型，传入的条件会略有不同
-
+        FilmDetailVO filmDetail = filmServiceAPI.getFilmDetail(searchType, searchParam);
         // 查询影片详细信息 --> dubbo的异步获取
+        // 获取影片的描述信息
+
+        // 获取图片信息
+
+        // 获取演员信息
 
         return null;
     }

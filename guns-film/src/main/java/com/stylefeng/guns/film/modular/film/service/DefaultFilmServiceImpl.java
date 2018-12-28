@@ -8,6 +8,7 @@ import com.stylefeng.guns.api.film.vo.*;
 import com.stylefeng.guns.core.util.DateUtil;
 import com.stylefeng.guns.film.common.persistence.dao.*;
 import com.stylefeng.guns.film.common.persistence.model.*;
+import org.apache.commons.lang.ArrayUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -35,6 +36,12 @@ public class DefaultFilmServiceImpl implements FilmServiceAPI{
 
     @Resource
     private MoocYearDictTMapper moocYearDictTMapper;
+
+    @Resource
+    private MoocFilmInfoTMapper moocFilmInfoTMapper;
+
+    @Resource
+    private MoocActorTMapper moocActorTMapper;
 
     @Override
     public List<Banner> getBanners() {
@@ -298,6 +305,58 @@ public class DefaultFilmServiceImpl implements FilmServiceAPI{
 
     @Override
     public FilmDetailVO getFilmDetail(int searchType, String searchParam) {
+        if (searchType == 0) {
+            return moocFilmTMapper.getFilmDetailById(searchParam);
+        } else {
+            return moocFilmTMapper.getFilmDetailByName(searchParam);
+        }
+    }
+
+    @Override
+    public FilmDescVO getFilmDesc(String filmId) {
+        MoocFilmInfoT moocFilmInfoT = getFilmInfo(filmId);
+        FilmDescVO filmDescVO = new FilmDescVO();
+        filmDescVO.setBiography(moocFilmInfoT.getBiography());
+        filmDescVO.setFilmId(filmId);
+        return filmDescVO;
+    }
+
+    @Override
+    public ImgVO getImgs(String filmId) {
+        MoocFilmInfoT moocFilmInfoT = getFilmInfo(filmId);
+        // 图片地址是五个以逗号为分隔的链接URL
+        String filmImgStr = moocFilmInfoT.getFilmImgs();
+        String[] filmImgs = filmImgStr.split(",");
+
+        ImgVO imgVO = new ImgVO();
+        if (!ArrayUtils.isEmpty(filmImgs) && (filmImgs.length == 5)) {
+            imgVO.setMainImg(filmImgs[0]);
+            imgVO.setImg01(filmImgs[1]);
+            imgVO.setImg02(filmImgs[2]);
+            imgVO.setImg03(filmImgs[3]);
+            imgVO.setImg04(filmImgs[4]);
+        }
+
+        return imgVO;
+    }
+
+    @Override
+    public ActorVO getDectInfo(String filmId) {
+        MoocFilmInfoT moocFilmInfoT = getFilmInfo(filmId);
+        // 获取导演编号
+        Integer directId = moocFilmInfoT.getDirectorId();
+
+        MoocActorT moocActorT = moocActorTMapper.selectById(directId);
+
+        ActorVO actorVO = new ActorVO();
+        actorVO.setImgAddress(moocActorT.getActorImg());
+        actorVO.setDirectorName(moocActorT.getActorName());
+
+        return actorVO;
+    }
+
+    @Override
+    public List<ActorVO> getActors(String filmId) {
         return null;
     }
 
@@ -318,5 +377,12 @@ public class DefaultFilmServiceImpl implements FilmServiceAPI{
         }
 
         return filmInfos;
+    }
+
+    private MoocFilmInfoT getFilmInfo(String filmId) {
+        MoocFilmInfoT moocFilmInfoT = new MoocFilmInfoT();
+        moocFilmInfoT.setFilmId(filmId);
+        moocFilmInfoT = moocFilmInfoTMapper.selectOne(moocFilmInfoT);
+        return moocFilmInfoT;
     }
 }
