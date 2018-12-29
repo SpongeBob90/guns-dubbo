@@ -2,7 +2,8 @@ package com.stylefeng.guns.admin.util;
 
 import com.stylefeng.guns.common.constant.Const;
 import com.stylefeng.guns.admin.config.properties.GunsProperties;
-import com.stylefeng.guns.admin.node.MenuNode;
+import com.stylefeng.guns.core.node.MenuNode;
+import com.stylefeng.guns.core.util.SpringContextHolder;
 
 import java.util.ArrayList;
 import java.util.List;

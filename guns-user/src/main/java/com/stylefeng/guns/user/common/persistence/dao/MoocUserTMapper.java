@@ -12,7 +12,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @author wyw
  * @since 2018-12-25
  */
-@Mapper
 public interface MoocUserTMapper extends BaseMapper<MoocUserT> {
 
 }

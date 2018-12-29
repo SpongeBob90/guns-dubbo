@@ -10,6 +10,8 @@ import java.io.Serializable;
 @Data
 public class FilmDetailVO implements Serializable {
 
+    private String imgPre;
+
     private String filmId;
 
     private String filmName;
@@ -29,5 +31,7 @@ public class FilmDetailVO implements Serializable {
     private String info02;
 
     private String info03;
+
+    private InfoRequstVO info04;
 
 }

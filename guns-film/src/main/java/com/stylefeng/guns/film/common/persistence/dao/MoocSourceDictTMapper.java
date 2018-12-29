@@ -12,7 +12,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @author wyw
  * @since 2018-12-27
  */
-@Mapper
 public interface MoocSourceDictTMapper extends BaseMapper<MoocSourceDictT> {
 
 }

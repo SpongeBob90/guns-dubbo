@@ -305,11 +305,13 @@ public class DefaultFilmServiceImpl implements FilmServiceAPI{
 
     @Override
     public FilmDetailVO getFilmDetail(int searchType, String searchParam) {
+        FilmDetailVO filmDetailVO;
         if (searchType == 0) {
-            return moocFilmTMapper.getFilmDetailById(searchParam);
+            filmDetailVO = moocFilmTMapper.getFilmDetailById(searchParam);
         } else {
-            return moocFilmTMapper.getFilmDetailByName(searchParam);
+            filmDetailVO = moocFilmTMapper.getFilmDetailByName(searchParam);
         }
+        return filmDetailVO;
     }
 
     @Override
@@ -343,9 +345,8 @@ public class DefaultFilmServiceImpl implements FilmServiceAPI{
     @Override
     public ActorVO getDectInfo(String filmId) {
         MoocFilmInfoT moocFilmInfoT = getFilmInfo(filmId);
-        // 获取导演编号
+        // 获取导演信息
         Integer directId = moocFilmInfoT.getDirectorId();
-
         MoocActorT moocActorT = moocActorTMapper.selectById(directId);
 
         ActorVO actorVO = new ActorVO();
@@ -357,7 +358,7 @@ public class DefaultFilmServiceImpl implements FilmServiceAPI{
 
     @Override
     public List<ActorVO> getActors(String filmId) {
-        return null;
+        return moocActorTMapper.getActors(filmId);
     }
 
     private List<FilmInfo> getFilmInfos(List<MoocFilmT> moocFilmTS) {

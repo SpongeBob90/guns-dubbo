@@ -14,7 +14,6 @@ import org.apache.ibatis.annotations.Param;
  * @author wyw
  * @since 2018-12-27
  */
-@Mapper
 public interface MoocFilmTMapper extends BaseMapper<MoocFilmT> {
 
     FilmDetailVO getFilmDetailByName(@Param("filmName") String filmName);

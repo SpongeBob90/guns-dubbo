@@ -104,12 +104,37 @@ public class FilmController {
     public ResponseVO films(@PathVariable("searchParam") String searchParam, int searchType) {
         // 根据searchType判断查询类型
         FilmDetailVO filmDetail = filmServiceAPI.getFilmDetail(searchType, searchParam);
+
         // 查询影片详细信息 --> dubbo的异步获取
+        String filmId = filmDetail.getFilmId();
+
         // 获取影片的描述信息
+        FilmDescVO filmDescVO = filmServiceAPI.getFilmDesc(filmId);
 
         // 获取图片信息
+        ImgVO imgVO = filmServiceAPI.getImgs(filmId);
 
+        // 获取导演信息
+        ActorVO director = filmServiceAPI.getDectInfo(filmId);
         // 获取演员信息
+        List<ActorVO> actors = filmServiceAPI.getActors(filmId);
+        // 组织actor属性
+        ActorRequestVO actorRequestVO = new ActorRequestVO();
+        actorRequestVO.setDirector(director);
+        actorRequestVO.setActors(actors);
+
+        // 组织info对象
+        InfoRequstVO infoRequstVO = new InfoRequstVO();
+        infoRequstVO.setActors(actorRequestVO);
+        infoRequstVO.setBiography(filmDescVO.getBiography());
+        infoRequstVO.setImgVO(imgVO);
+        infoRequstVO.setFilmId(filmId);
+
+        // 设置图片路径前缀
+        filmDetail.setImgPre("http://img.meetingshop.cn/");
+
+        // 组织返回值
+        filmDetail.setInfo04(infoRequstVO);
 
         return null;
     }
