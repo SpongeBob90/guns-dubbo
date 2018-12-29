@@ -1,6 +1,6 @@
 package com.stylefeng.guns.admin.jwt;
 
-import com.stylefeng.guns.admin.util.IdGenerator;
+import com.stylefeng.guns.core.util.IdGenerator;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.impl.DefaultClaims;
 import io.jsonwebtoken.impl.crypto.MacProvider;
