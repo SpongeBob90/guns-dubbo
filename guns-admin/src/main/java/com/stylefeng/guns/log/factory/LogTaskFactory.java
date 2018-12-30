@@ -7,12 +7,8 @@ import com.stylefeng.guns.modular.system.dao.LoginLogMapper;
 import com.stylefeng.guns.modular.system.dao.OperationLogMapper;
 import com.stylefeng.guns.modular.system.model.LoginLog;
 import com.stylefeng.guns.modular.system.model.OperationLog;
-import com.stylefeng.guns.modular.system.dao.LoginLogMapper;
-import com.stylefeng.guns.modular.system.dao.OperationLogMapper;
-import com.stylefeng.guns.modular.system.model.LoginLog;
-import com.stylefeng.guns.modular.system.model.OperationLog;
-import com.stylefeng.guns.admin.db.Db;
-import com.stylefeng.guns.admin.util.ToolUtil;
+import com.stylefeng.guns.core.db.Db;
+import com.stylefeng.guns.core.util.ToolUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

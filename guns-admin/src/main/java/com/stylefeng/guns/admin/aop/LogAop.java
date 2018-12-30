@@ -8,7 +8,7 @@ import com.stylefeng.guns.log.factory.LogTaskFactory;
 import com.stylefeng.guns.shiro.ShiroKit;
 import com.stylefeng.guns.shiro.ShiroUser;
 import com.stylefeng.guns.admin.util.Contrast;
-import com.stylefeng.guns.admin.support.HttpKit;
+import com.stylefeng.guns.core.support.HttpKit;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;

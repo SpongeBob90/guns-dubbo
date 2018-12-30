@@ -37,7 +37,7 @@
             CONCAT(film.film_time,(SELECT show_name FROM mooc_source_dict_t t WHERE t.uuid = film.uuid),'上映') info02
         FROM mooc_film_t film, mooc_film_info_t info
         WHERE film.UUID = info.film_id
-        AND film.film_name LIKE '%#{filmName}%'
+        AND film.film_name LIKE CONCAT('%',#{filmName},'%')
     </select>
 
     <select id="getFilmDetailById" resultType="com.stylefeng.guns.api.film.vo.FilmDetailVO">

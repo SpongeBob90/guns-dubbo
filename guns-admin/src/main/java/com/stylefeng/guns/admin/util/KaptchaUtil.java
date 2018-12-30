@@ -1,6 +1,7 @@
 package com.stylefeng.guns.admin.util;
 
 import com.stylefeng.guns.admin.config.properties.GunsProperties;
+import com.stylefeng.guns.core.util.SpringContextHolder;
 
 /**
  * 验证码工具类

@@ -1,6 +1,6 @@
 package com.stylefeng.guns.log;
 
-import com.stylefeng.guns.admin.util.SpringContextHolder;
+import com.stylefeng.guns.core.util.SpringContextHolder;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;

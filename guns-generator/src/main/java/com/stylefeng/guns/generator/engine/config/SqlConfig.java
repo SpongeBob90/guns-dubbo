@@ -1,8 +1,8 @@
 package com.stylefeng.guns.generator.engine.config;
 
 import com.baomidou.mybatisplus.toolkit.IdWorker;
-import com.stylefeng.guns.admin.constant.IsMenu;
-import com.stylefeng.guns.admin.util.ToolUtil;
+import com.stylefeng.guns.core.constant.IsMenu;
+import com.stylefeng.guns.core.util.ToolUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

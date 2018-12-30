@@ -2,7 +2,7 @@ package com.stylefeng.guns.beetl;
 
 import com.stylefeng.guns.tag.DictSelectorTag;
 import com.stylefeng.guns.admin.util.KaptchaUtil;
-import com.stylefeng.guns.admin.util.ToolUtil;
+import com.stylefeng.guns.core.util.ToolUtil;
 import org.beetl.core.Context;
 import org.beetl.core.Function;
 import org.beetl.core.Tag;

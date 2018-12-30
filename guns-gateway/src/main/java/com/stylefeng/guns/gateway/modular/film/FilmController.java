@@ -104,7 +104,7 @@ public class FilmController {
         // 根据searchType判断查询类型
         FilmDetailVO filmDetail = filmServiceAPI.getFilmDetail(searchType, searchParam);
 
-        // 查询影片详细信息 --> dubbo的异步获取
+        // 查询影片详细信息 --> dubbo的异步获取L
         String filmId = filmDetail.getFilmId();
 
         // 获取影片的描述信息
