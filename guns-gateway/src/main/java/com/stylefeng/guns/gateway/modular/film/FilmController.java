@@ -136,7 +136,7 @@ public class FilmController {
             ActorRequestVO actorRequestVO = new ActorRequestVO();
             actorRequestVO.setDirector(directorFuture.get());
             actorRequestVO.setActors(actorsFuture.get());
-            // 组织info对象
+            // 组织info对象 
             InfoRequstVO infoRequstVO = new InfoRequstVO();
             infoRequstVO.setActors(actorRequestVO);
             infoRequstVO.setBiography(filmDescVOFuture.get().getBiography());
